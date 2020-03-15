@@ -1,6 +1,7 @@
 namespace TransactionSorter.Models
 
 open System.Text.Json.Serialization
+open System
 
 type TransactionModel () =
     [<JsonPropertyName("amount")>]
@@ -9,5 +10,9 @@ type TransactionModel () =
     member val Payee : string = null with get, set
     [<JsonPropertyName("parent_transaction_id")>]
     member val ParentTransactionId : string = null with get, set
-    member this.Amount : decimal =
-        (decimal)this.MilliunitAmount / 1000.00m
+    [<JsonPropertyName("date")>]
+    member val Date : DateTime = DateTime() with get, set
+    member this.DecimalAmount : decimal =
+         ((decimal)this.MilliunitAmount / 1000.00m)
+    member this.DisplayAmount : string =
+        sprintf "$%.2f" this.DecimalAmount

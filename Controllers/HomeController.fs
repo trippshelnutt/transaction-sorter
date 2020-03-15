@@ -29,6 +29,6 @@ type HomeController (logger : ILogger<HomeController>, configuration : IConfigur
             client.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue("application/json"))
             client.DefaultRequestHeaders.Add("Authorization", "BEARER " + configuration.["YNAB:apikey"])
         
-            let! message = client.GetStringAsync(configuration.["YNAB:URL"] + "/budgets") |> Async.AwaitTask 
+            let! message = client.GetStringAsync(configuration.["YNAB:URL"] + "/budgets/" + configuration.["YNAB:Budget"] + "/categories") |> Async.AwaitTask 
             return this.Content(message)
         }

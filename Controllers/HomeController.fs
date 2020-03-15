@@ -43,9 +43,22 @@ type HomeController (logger : ILogger<HomeController>, configuration : IConfigur
             let content =
                 response.Data.Transactions
                 |> Seq.sortByDescending (fun t -> t.MilliunitAmount)
+                |> Seq.map this.CheckAndFillParentInformation
+                |> Async.Parallel
+                |> Async.RunSynchronously
                 |> Seq.map this.GetTransactionLineItem
                 |> Seq.fold (+) ""
             return content
+        }
+
+    member private this.GetTransaction (transactionId : string) =
+        async {
+            use client = this.BuildHttpClient()
+        
+            let requestUrl = this.GetTransactionByIdRequestUrl transactionId
+            let! responseStream = client.GetStreamAsync(requestUrl) |> Async.AwaitTask 
+            let! response = JsonSerializer.DeserializeAsync<GetTransactionResponse>(responseStream).AsTask <| () |> Async.AwaitTask
+            return response.Data.Transaction
         }
         
     member private this.BuildHttpClient () : HttpClient =
@@ -61,5 +74,25 @@ type HomeController (logger : ILogger<HomeController>, configuration : IConfigur
         let sinceDateString = sinceDate.ToString("yyyy-M-d")
         Uri(sprintf "%s/budgets/%s/categories/%s/transactions?since_date=%s" urlBase budgetId categoryId sinceDateString)
 
-    member private this.GetTransactionLineItem (transaction) =
+    member private this.GetTransactionByIdRequestUrl (transactionId : string) : Uri =
+        let urlBase = configuration.["YNAB:URL"]
+        let budgetId = configuration.["YNAB:Budget"]
+        Uri(sprintf "%s/budgets/%s/transactions/%s" urlBase budgetId transactionId)
+
+    member private this.CheckAndFillParentInformation (transaction : TransactionModel) =
+        async {
+            match transaction.Payee with
+                | p when p |> isNull -> return! this.FillParentInformation transaction
+                | _ -> return transaction
+        }
+
+    member private this.FillParentInformation (transaction : TransactionModel) =
+        async {
+            let! parentTransaction = this.GetTransaction(transaction.ParentTransactionId)
+            transaction.Payee <- parentTransaction.Payee
+            return transaction
+        }
+
+    member private this.GetTransactionLineItem (transaction : TransactionModel) =
         sprintf "Payee: %30s Amount: %8.2f\n" transaction.Payee transaction.Amount
+

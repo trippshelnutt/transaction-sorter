@@ -9,7 +9,9 @@
     <Compile Include="Models/ErrorViewModel.fs" />
     <Compile Include="Models/TransactionModel.fs" />
     <Compile Include="Models/MultipleTransactionData.fs" />
+    <Compile Include="Models/SingleTransactionData.fs" />
     <Compile Include="Models/GetTransactionsResponse.fs" />
+    <Compile Include="Models/GetTransactionResponse.fs" />
     <Compile Include="Controllers/HomeController.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />

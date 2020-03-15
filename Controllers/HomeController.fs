@@ -9,9 +9,3 @@ type HomeController (logger : ILogger<HomeController>, configuration : IConfigur
 
     member this.Index () =
         this.View()
-
-    member this.Privacy () =
-        this.View()
-
-    member this.Error () =
-        this.View();

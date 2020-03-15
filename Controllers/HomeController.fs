@@ -10,6 +10,8 @@ open Microsoft.Extensions.Logging
 open Microsoft.Extensions.Configuration
 open System.Net.Http
 open System.Net.Http.Headers
+open System.Text.Json
+open TransactionSorter.Models
 
 type HomeController (logger : ILogger<HomeController>, configuration : IConfiguration) =
     inherit Controller()
@@ -36,8 +38,14 @@ type HomeController (logger : ILogger<HomeController>, configuration : IConfigur
         
             let groceriesId = configuration.["YNAB:Groceries"]
             let requestUrl = this.GetTransactionsByCategoryAndDateRequestUrl groceriesId sinceDate
-            let! message = client.GetStringAsync(requestUrl) |> Async.AwaitTask 
-            return message
+            let! responseStream = client.GetStreamAsync(requestUrl) |> Async.AwaitTask 
+            let! response = JsonSerializer.DeserializeAsync<GetTransactionsResponse>(responseStream).AsTask <| () |> Async.AwaitTask
+            let content =
+                response.Data.Transactions
+                |> Seq.sortByDescending (fun t -> t.MilliunitAmount)
+                |> Seq.map this.GetTransactionLineItem
+                |> Seq.fold (+) ""
+            return content
         }
         
     member private this.BuildHttpClient () : HttpClient =
@@ -52,3 +60,6 @@ type HomeController (logger : ILogger<HomeController>, configuration : IConfigur
         let budgetId = configuration.["YNAB:Budget"]
         let sinceDateString = sinceDate.ToString("yyyy-M-d")
         Uri(sprintf "%s/budgets/%s/categories/%s/transactions?since_date=%s" urlBase budgetId categoryId sinceDateString)
+
+    member private this.GetTransactionLineItem (transaction) =
+        sprintf "Payee: %30s Amount: %8.2f\n" transaction.Payee transaction.Amount

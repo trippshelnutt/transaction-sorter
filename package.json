@@ -1,10 +1,12 @@
 {
     "scripts": {
-        "buildDev": "SET NODE_ENV=development && webpack -d --color",
-        "buildProd": "SET NODE_ENV=production && webpack -p --color"
+        "buildDev": "webpack -d --color",
+        "buildProd": "webpack -p --color"
     },
     "devDependencies": {
         "ts-loader": "^6.2.1",
-        "typescript": "^3.8.3"
+        "typescript": "^3.8.3",
+        "webpack": "^4.42.0",
+        "webpack-cli": "^3.3.11"
     }
 }

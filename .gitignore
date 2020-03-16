@@ -5,3 +5,7 @@ bin
 obj
 
 **/*.swp
+
+node_modules
+Scripts/**/*.js
+wwwroot/js/*.js

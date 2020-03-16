@@ -20,4 +20,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.0.0" />
   </ItemGroup>
+  <Target Name="NPMBuild" BeforeTargets="Build">
+    <Exec Condition="$(Configuration) == 'Debug'" Command="npm run buildDev" />
+    <Exec Condition="$(Configuration) == 'Release'" Command="npm run buildProd" />
+  </Target>
 </Project>

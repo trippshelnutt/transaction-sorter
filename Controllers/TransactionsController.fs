@@ -14,7 +14,7 @@ open System.Text.Json
 open TransactionSorter.Models
 
 [<ApiController>]
-type TransactionsController (logger : ILogger<HomeController>, configuration : IConfiguration) =
+type TransactionsController (logger : ILogger<TransactionsController>, configuration : IConfiguration) =
     inherit ControllerBase()
 
     [<HttpGet("/api/[controller]/{month}/{category}")>]

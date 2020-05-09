@@ -1,8 +1,9 @@
 var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        main: './Scripts/main.ts'
+        index: './Scripts/index.ts'
     },
     module: {
         rules: [
@@ -16,9 +17,19 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
+    resolve: {
+        alias: {
+            vue: 'vue/dist/vue.min.js'
+        }
+    },
     output: {
         filename: 'bundle.js',
         publicPath: '/js/',
         path: path.join(__dirname, '/wwwroot/js/'),
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
+        })
+    ]
 };

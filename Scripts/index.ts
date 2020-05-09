@@ -1,7 +1,14 @@
 import Vue from 'vue'
+import axios from 'axios'
 
 interface ITransaction {
-    data:string
+    amount:string,
+    payee:string,
+}
+
+interface ITransactionData {
+    DisplayAmount:string,
+    payee_name:string,
 }
 
 var app = new Vue({
@@ -33,15 +40,20 @@ var app = new Vue({
         ],
         selectedMonth: '1'
     },
+    mounted () {
+        //this.getTransactions()
+    },
     methods: {
         getTransactions: function() {
-            this.transactions = [
-                { data: this.selectedMonth },
-                { data: this.selectedCategory },
-                { data: this.selectedMonth },
-                { data: this.selectedCategory },
-                { data: this.selectedMonth },
-            ];
+            axios
+                .get(`/api/transactions/${ this.selectedMonth }/${ this.selectedCategory}`)
+                .then(response => {
+                    const transactions = response.data.data.transactions as Array<ITransactionData>;
+                    console.debug(transactions);
+                    this.transactions = transactions.map((t: { DisplayAmount:string, payee_name:string }) : ITransaction => {
+                        return { amount: t.DisplayAmount, payee: t.payee_name };
+                    });
+                });
         }
     }
 });

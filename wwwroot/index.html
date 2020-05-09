@@ -9,7 +9,10 @@
     <button v-on:click="getTransactions">Get Transactions</button>
     <div>
         <div v-for="transaction in transactions">
-            <span>{{ transaction.data }}
+            <div>
+                <span>{{ transaction.amount }}</span>
+                <span>{{ transaction.payee }}</span>
+            </div>
         </div>
     </div>
 </div>

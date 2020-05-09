@@ -1,5 +1,17 @@
 <div id="app">
-    {{ message }}
+    <h1>{{ title }}</h1>
+    <select v-model="selectedMonth">
+        <option v-for="month in months" v-bind:value="month.value">{{ month.text }}</option>
+    </select>
+    <select v-model="selectedCategory">
+        <option v-for="category in categories" v-bind:value="category.value">{{ category.text }}</option>
+    </select>
+    <button v-on:click="getTransactions">Get Transactions</button>
+    <div>
+        <div v-for="transaction in transactions">
+            <span>{{ transaction.data }}
+        </div>
+    </div>
 </div>
 
 <script src="/js/bundle.js"></script>

@@ -36,9 +36,9 @@ type Startup private () =
             app.UseHsts() |> ignore
             app.UseHttpsRedirection() |> ignore
 
-        app.UseRouting() |> ignore
         app.UseStaticFiles() |> ignore
-        app.UseDefaultFiles() |> ignore
+        app.UseRouting() |> ignore
+
         app.UseAuthorization() |> ignore
 
         app.UseEndpoints(fun endpoints ->

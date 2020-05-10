@@ -1,14 +1,8 @@
 namespace TransactionSorter
 
-open System
 open System.Net
-open System.Collections.Generic
-open System.Linq
-open System.Threading.Tasks
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
-open Microsoft.AspNetCore.HttpsPolicy;
-open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting

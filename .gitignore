@@ -2,6 +2,7 @@
 .fake
 .vscode
 .vs
+.idea
 
 bin
 obj

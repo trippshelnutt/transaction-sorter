@@ -1,5 +1,7 @@
 .ionide
+.fake
 .vscode
+.vs
 
 bin
 obj
@@ -9,6 +11,3 @@ obj
 node_modules
 Scripts/**/*.js
 wwwroot/js/*.js
-
-.fake
-.ionide

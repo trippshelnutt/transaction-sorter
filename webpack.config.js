@@ -1,8 +1,10 @@
-module.exports = (env, argv) => {
-    if (argv.mode === 'production') {
-        return require('./webpack.config.prod');
-    }
-    if (argv.mode === 'development') {
-        return require('./webpack.config.dev');
-    }
-}
+module.exports = (env) => {
+  if (env.production) {
+    console.log(env);
+    return require("./webpack.config.prod");
+  }
+  if (env.development) {
+    console.log(env);
+    return require("./webpack.config.dev");
+  }
+};

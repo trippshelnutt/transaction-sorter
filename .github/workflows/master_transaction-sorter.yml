@@ -22,13 +22,10 @@ jobs:
           dotnet-version: '5.0.x'
           include-prerelease: true
 
-      - name: NPM install
+      - name: Install NPM packages
         run: npm i
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
+      - name: Build and Publish with dotnet
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job

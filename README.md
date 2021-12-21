@@ -7,7 +7,7 @@ Website to pull transactions from YNAB API and sort using splits without showing
 - `dotnet run`
 
 ### Description
-- .NET Core 3.1
+- .NET 5 
 - F#
 - Typescript
 - Web API
